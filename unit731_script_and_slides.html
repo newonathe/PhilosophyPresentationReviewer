@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unit 731 — Part 1 Script & Slide Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1c1a17; --paper: #f7f3ec; --warm-mid: #e8e0d0; --warm-rule: #cfc4b0;
+    --gold: #a0752a; --gold-light: #c9a55e; --red: #8b2121; --teal: #1a5c4a;
+    --blue: #1a3d6b; --muted: #6b6359; --faint: #ede8de;
+  }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6; }
+  .print-bar { background: var(--ink); color: var(--paper); padding: 10px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .print-bar p { font-size: 12px; opacity: 0.6; }
+  .print-bar button { background: var(--gold); color: #fff; border: none; padding: 6px 18px; border-radius: 4px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+  .print-bar button:hover { background: var(--gold-light); }
+  .page { max-width: 860px; margin: 0 auto; padding: 48px 32px 80px; }
+  .doc-header { border-bottom: 2px solid var(--ink); padding-bottom: 20px; margin-bottom: 40px; }
+  .doc-header .kicker { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 6px; }
+  .doc-header h1 { font-family: 'EB Garamond', serif; font-size: 28px; font-weight: 600; line-height: 1.2; }
+  .doc-header .meta { display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap; }
+  .doc-header .meta span { font-size: 12px; color: var(--muted); }
+  .doc-header .meta strong { color: var(--ink); }
+  .section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; margin-top: 48px; }
+  .section-heading .num { width: 28px; height: 28px; background: var(--ink); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+  .section-heading h2 { font-family: 'EB Garamond', serif; font-size: 22px; font-weight: 600; }
+  .section-heading .sub { font-size: 12px; color: var(--muted); margin-left: auto; }
+  .script-instructions { background: var(--faint); border-left: 3px solid var(--gold); padding: 12px 16px; margin-bottom: 28px; font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .script-instructions strong { color: var(--ink); }
+  .timing-bar { display: flex; border-radius: 6px; overflow: hidden; margin-bottom: 32px; height: 30px; }
+  .timing-seg { display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 500; color: #fff; text-align: center; padding: 0 3px; overflow: hidden; white-space: nowrap; }
+  .segment { margin-bottom: 32px; border-left: 1px solid var(--warm-rule); padding-left: 20px; position: relative; }
+  .segment::before { content: ''; position: absolute; left: -4px; top: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+  .segment-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .segment-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; color: var(--gold); }
+  .segment-time { font-size: 11px; color: var(--muted); background: var(--warm-mid); padding: 1px 8px; border-radius: 10px; }
+  .segment-slide-ref { font-size: 11px; color: var(--blue); margin-left: auto; }
+  .script-text { font-family: 'EB Garamond', serif; font-size: 17px; line-height: 1.9; color: var(--ink); }
+  .script-text em { color: var(--muted); font-style: italic; font-size: 15px; }
+  .pause { display: inline-block; background: var(--warm-mid); color: var(--muted); font-size: 10px; padding: 1px 6px; border-radius: 3px; font-family: 'DM Sans', sans-serif; vertical-align: middle; margin: 0 2px; font-style: normal; }
+  .handoff { background: var(--faint); border: 1px solid var(--warm-rule); border-radius: 6px; padding: 14px 18px; margin-top: 10px; }
+  .handoff .label { font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 500; }
+  .slide-card { background: #fff; border: 1px solid var(--warm-rule); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+  .slide-card-header { display: flex; align-items: center; gap: 12px; padding: 12px 18px; background: var(--faint); border-bottom: 1px solid var(--warm-rule); }
+  .slide-num { width: 24px; height: 24px; background: var(--ink); color: var(--paper); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+  .slide-card-header h3 { font-family: 'EB Garamond', serif; font-size: 16px; font-weight: 600; flex: 1; }
+  .slide-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+  .slide-body { padding: 16px 18px 18px; }
+  .slide-visual-note { font-size: 11px; color: var(--teal); background: #e8f4f0; border-radius: 4px; padding: 6px 10px; margin-bottom: 14px; line-height: 1.6; }
+  .slide-visual-note::before { content: '🖼  '; }
+  .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .bullet-item { display: flex; gap: 10px; align-items: flex-start; }
+  .bullet-marker { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); margin-top: 7px; flex-shrink: 0; }
+  .bullet-head { font-weight: 500; color: var(--ink); font-size: 13px; display: block; margin-bottom: 2px; }
+  .bullet-desc { color: var(--muted); font-size: 12px; line-height: 1.6; }
+  .sources-block { border-top: 1px solid var(--warm-rule); padding-top: 12px; margin-top: 4px; }
+  .sources-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 6px; }
+  .source-item { font-size: 11.5px; color: var(--muted); display: flex; gap: 6px; align-items: flex-start; margin-bottom: 4px; line-height: 1.5; }
+  .source-item::before { content: '↳'; color: var(--warm-rule); flex-shrink: 0; }
+  .source-item strong { color: var(--ink); }
+  .source-item a { color: var(--blue); text-decoration: none; font-size: 10px; word-break: break-all; }
+  .speaker-note { background: var(--faint); border-left: 2px solid var(--gold-light); padding: 8px 12px; margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .speaker-note strong { color: var(--ink); }
+  .end-note { margin-top: 48px; padding: 20px 24px; background: var(--faint); border-radius: 8px; border: 1px solid var(--warm-rule); }
+  .end-note .label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 10px; }
+  .end-note ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .end-note li { font-size: 13px; color: var(--muted); display: flex; gap: 8px; }
+  .end-note li::before { content: '–'; color: var(--warm-rule); flex-shrink: 0; }
+  .end-note li strong { color: var(--ink); }
+  @media print {
+    .print-bar { display: none; }
+    .page { padding: 24px 16px; }
+    .slide-card { break-inside: avoid; }
+    .section-heading { margin-top: 32px; }
+  }
+  @media (max-width: 600px) {
+    .page { padding: 24px 16px; }
+    .doc-header h1 { font-size: 20px; }
+    .script-text { font-size: 15px; }
+    .section-heading .sub { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <p>Unit 731 — Part 1 Script &amp; Slide Guide · Philosophy 13</p>
+  <button onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="page">
+
+  <div class="doc-header">
+    <p class="kicker">Philosophy 13 · Ethics in Science · Group Case Study · Part 1</p>
+    <h1>Unit 731 — Presentation Script &amp; Slide-by-Slide Guide</h1>
+    <div class="meta">
+      <span><strong>Your part:</strong> Relevant Factors of the Ethics Case</span>
+      <span><strong>Allowed time:</strong> ~7.5 min (30% of 25 min)</span>
+      <span><strong>Script length:</strong> 6 min spoken + 1.5 min buffer</span>
+      <span><strong>Slides:</strong> 7</span>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 1: SCRIPT ══ -->
+  <div class="section-heading">
+    <div class="num">1</div>
+    <h2>The 6-Minute Script</h2>
+    <span class="sub">≈ 780 words · measured, calm delivery</span>
+  </div>
+
+  <div class="timing-bar">
+    <div class="timing-seg" style="width:7%;background:#6b6359;">Intro ~25s</div>
+    <div class="timing-seg" style="width:18%;background:#a0752a;">Origins ~60s</div>
+    <div class="timing-seg" style="width:15%;background:#8b5a2b;">Agents ~55s</div>
+    <div class="timing-seg" style="width:22%;background:#8b2121;">Events ~80s</div>
+    <div class="timing-seg" style="width:15%;background:#6b3030;">Decisions ~55s</div>
+    <div class="timing-seg" style="width:16%;background:#4a2828;">Outcomes ~65s</div>
+    <div class="timing-seg" style="width:7%;background:#2a1a1a;">Hand-off ~20s</div>
+  </div>
+
+  <div class="script-instructions">
+    <strong>How to use this:</strong> Read aloud during practice — do not memorize word-for-word, but internalize the structure and key phrases. <span class="pause">pause</span> markers show where to breathe and let the audience absorb. Slide references tell you when to advance. Aim for a calm, composed pace — neutral delivery of these facts signals authority.
+  </div>
+
+  <!-- Intro -->
+  <div class="segment">
+    <div class="segment-header">
+      <span class="segment-label">Introduction</span>
+      <span class="segment-time">~25 seconds</span>
+      <span class="segment-slide-ref">→ Slide 1</span>
+    </div>
+    <p class="script-text">
+      Before our group examines the ethics of this case, I want to establish the facts — what happened, who was involved, what decisions were made, and what followed. <span class="pause">pause</span> The case we are presenting is Unit 731: a covert biological and chemical warfare research unit operated by the Imperial Japanese Army during World War II. It is one of the most extensively documented instances of state-sanctioned human experimentation in modern history — and it is our case for this course because its perpetrators were not soldiers in the conventional sense. They were trained scientists and physicians.
+    </p>
+  </div>
+
+  <!-- Origins -->
+  <div class="segment">
+    <div class="segment-header">
+      <span class="segment-label">Origins &amp; Establishment</span>
+      <span class="segment-time">~60 seconds</span>
+      <span class="segment-slide-ref">→ Slide 2</span>
+    </div>
+    <p class="script-text">
+      To understand how Unit 731 came to exist, we need to understand the context of 1930s Japan. Japan had been engaged in aggressive imperial expansion across East Asia, and its military leadership was acutely aware of Japan's industrial disadvantages relative to the Soviet Union and the United States. <span class="pause">pause</span><br><br>
+
+      In 1931, the Japanese Kwantung Army staged an explosion on a railway line in Manchuria — the so-called Mukden Incident — as a pretext to invade and occupy the territory. Manchuria gave Japan something strategically valuable: a vast, isolated region, far from international scrutiny, with a large and vulnerable civilian population.<br><br>
+
+      <span class="pause">pause</span><br><br>
+
+      Into this context stepped Lt. Gen. Shirō Ishii — a trained microbiologist and military physician who had studied European biological warfare programs abroad. Ishii returned with a specific observation: the 1925 Geneva Protocol banned the use of biological weapons, but contained no mechanism for verification and no restriction on development. He argued to Army leadership that biological weapons were a militarily decisive and legally unregulated frontier. His proposal was approved. <span class="pause">pause</span><br><br>
+
+      A preliminary facility was established in Manchuria in 1932. After a prisoner revolt forced relocation, a purpose-built complex was constructed at Pingfang, south of Harbin. In 1936, Emperor Hirohito issued Imperial Decree No. 575 — formally authorizing what was publicly called the Epidemic Prevention and Water Purification Department of the Kwantung Army. That name was deliberate misdirection. The unit's actual mandate was the development of biological and chemical weapons through live human experimentation.
+    </p>
+  </div>
+
+  <!-- Agents -->
+  <div class="segment">
+    <div class="segment-header">
+      <span class="segment-label">Key Moral Agents</span>
+      <span class="segment-time">~55 seconds</span>
+      <span class="segment-slide-ref">→ Slide 3</span>
+    </div>
+    <p class="script-text">
+      This case involves four distinct layers of moral agents — and my groupmates will analyze each one in depth. For now, I want to identify them factually.<br><br>
+
+      <span class="pause">pause</span><br><br>
+
+      First, Ishii and the commanding officers who designed the program — trained professionals who understood exactly what the experiments would do to human bodies. Second, the research corps: over three thousand personnel drawn from Japan's top medical and scientific universities — many of whom actively sought posting to the unit for the research resources and career advancement it offered. Third, the Japanese state — which provided formal imperial authorization, concealed government funding, and the institutional cover of a public health mission.<br><br>
+
+      <span class="pause">pause</span><br><br>
+
+      And fourth — the United States government who made a deliberate decision to give immunity to the Unit 731's commanders in exchange for biological warfare research data. Each of these agents made specific decisions. My groupmates will examine why those decisions were wrong. My task is to show you what those decisions were.
+    </p>
+  </div>
+
+  <!-- Events -->
+  <div class="segment">
+    <div class="segment-header">
+      <span class="segment-label">The Events</span>
+      <span class="segment-time">~80 seconds</span>
+      <span class="segment-slide-ref">→ Slides 4 &amp; 5</span>
+    </div>
+    <p class="script-text">
+      The Pingfang complex at its peak employed over three thousand personnel and occupied roughly six square kilometers. It included laboratories, autopsy theaters, a private airstrip, a crematorium, and a prison block capable of holding approximately four hundred subjects at a time. <span class="pause">pause</span><br><br>
+
+      Subjects — referred to internally as <em>maruta</em>, the Japanese word for "logs" — were predominantly Chinese civilians and prisoners of war, alongside Soviet soldiers, Koreans, Mongolians, and in documented cases, Allied prisoners. The word "logs" was not casual language. It was an official administrative designation, used in documentation and internal records, designed to remove subjects from the moral consideration normally extended to persons.<br><br>
+
+      <span class="pause">pause</span><br><br>
+
+      The experiments were systematic and lethal. Subjects were deliberately infected with plague, cholera, typhoid, and anthrax to measure infectious doses and transmission rates. Vivisection — surgery on conscious, living subjects, frequently without anesthesia — was performed to observe physiological responses in real time. Frostbite experiments involved immersing limbs in ice water until frozen. Pressure chamber experiments tested physical limits until blood vessels ruptured.<br><br>
+
+      <span class="pause">pause</span><br><br>
+
+      And critically — Unit 731 was not only a laboratory program. In 1940, plague-infected fleas were dispersed by aircraft over Ningbo, China, triggering a civilian outbreak. In 1941, a similar operation targeted Changde, Hunan province. The program extended to a network of over sixty affiliated units across occupied China, Korea, and Southeast Asia — all operating under epidemic prevention cover.
+    </p>
+  </div>
+
+  <!-- Core Decisions -->
+  <div class="segment">
+    <div class="segment-header">
+      <span class="segment-label">Core Decisions</span>
+      <span class="segment-time">~55 seconds</span>
+      <span class="segment-slide-ref">→ Slide 5</span>
+    </div>
+    <p class="script-text">
+      I want to be precise about what the moral problem actually is — because that precision is what makes the ethical analysis that follows meaningful.<br><br>
+
+      <span class="pause">pause</span><br><br>
+
+      The first core decision was Ishii's: to design a program of lethal human experimentation rather than pursue ethical alternatives. Defensive biological research — vaccines, disease prevention, field sanitation — was being pursued by other nations' military medical programs without using human subjects. That alternative existed and was known. The second was the Army's decision to authorize and sustain the program for over a decade with full institutional awareness of its nature. The third was the decision of individual researchers to participate — many voluntarily, some actively seeking the posting.<br><br>
+
+      <span class="pause">pause</span><br><br>
+
+      And a fourth decision — the one that closes the case — was made by Ishii in August 1945, when Japan surrendered. He ordered the execution of surviving subjects, the burning of documents, and the partial demolition of the facility. That act of deliberate destruction demonstrates that those who ran the program knew precisely what it was.
+    </p>
+  </div>
+
+  <!-- Outcomes -->
+  <div class="segment">
+    <div class="segment-header">
+      <span class="segment-label">Outcomes &amp; Consequences</span>
+      <span class="segment-time">~65 seconds</span>
+      <span class="segment-slide-ref">→ Slide 6</span>
+    </div>
+    <p class="script-text">
+      The direct consequences: approximately three thousand deaths within the Pingfang complex. Broader estimates, including field biological weapons operations and affiliated units, range from tens of thousands to over three hundred thousand — figures that remain contested because the records were deliberately burned.<br><br>
+
+      <span class="pause">pause</span><br><br>
+
+      What followed the war is equally significant. The Soviet Union conducted the Khabarovsk War Crimes Trials in 1949, convicting twelve captured Unit 731 personnel. Western governments dismissed the proceedings as Cold War propaganda — motivated partly by the fact that the United States had already made a different arrangement.<br><br>
+
+      American biological warfare investigators had assessed Unit 731's data as militarily valuable. General MacArthur approved a secret immunity deal: full protection from prosecution in exchange for the research findings, which were transferred to the U.S. Army program at Camp Detrick, Maryland. <span class="pause">pause</span><br><br>
+
+      For context: in the same years, seven Nazi doctors were executed at Nuremberg for experiments of directly comparable character — hypothermia, pressure chambers, deliberate infection. The divergence in outcome is not explained by factual differences between the programs. It is explained by a deliberate U.S. strategic decision to prioritize intelligence value over accountability. Shirō Ishii died in 1959, never prosecuted. Many of his researchers returned to prominent careers in Japanese medicine and science.
+    </p>
+  </div>
+
+  <!-- Handoff -->
+  <div class="segment">
+    <div class="segment-header">
+      <span class="segment-label">Handoff to Part 2</span>
+      <span class="segment-time">~20 seconds</span>
+      <span class="segment-slide-ref">→ Slide 7</span>
+    </div>
+    <div class="handoff">
+      <div class="label">Spoken transition</div>
+      <p class="script-text">
+        Those are the facts. <span class="pause">pause</span> My groupmate will now take us through the ethical analysis — examining what makes the core decisions I've just described not merely harmful, but specifically and philosophically wrong.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2: SLIDES ══ -->
+  <div class="section-heading">
+    <div class="num">2</div>
+    <h2>Slide-by-Slide Guide</h2>
+    <span class="sub">7 slides · bullets with descriptions &amp; sources</span>
+  </div>
+
+  <!-- SLIDE 1 -->
+  <div class="slide-card">
+    <div class="slide-card-header">
+      <div class="slide-num">1</div>
+      <h3>Title Slide</h3>
+      <span class="slide-tag" style="background:#f3ede0;color:#a0752a;">Opening</span>
+    </div>
+    <div class="slide-body">
+      <div class="slide-visual-note">Suggested visual: Black-and-white archival photograph of the Pingfang complex exterior, or the Unit 731 Museum facade in Harbin. Avoid graphic imagery on the title — establish tone through architecture, not atrocity.</div>
+      <ul class="bullet-list">
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Unit 731: Imperial Japan's Covert Biological Warfare Program</span><span class="bullet-desc">Main title. Keep it stark and factual — the gravity of the case should do the work. No decorative subtitle needed.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Harbin, Manchuria · 1935–1945</span><span class="bullet-desc">Location and operational period as a subtitle line. Immediately situates the audience in time and place before you speak a word.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Part 1: Relevant Factors of the Ethics Case</span><span class="bullet-desc">Your section label, including your name, so the class knows which part of the presentation they are watching.</span></div></li>
+      </ul>
+      <div class="sources-block">
+        <div class="sources-label">Sources</div>
+        <div class="source-item">No citation needed for a title slide. Visual source: Unit 731 Museum, Harbin — <a href="http://www.731museum.org.cn/en/" target="_blank">731museum.org.cn/en</a></div>
+      </div>
+      <div class="speaker-note"><strong>Speaker note:</strong> Don't rush this slide. Give the audience one or two seconds to read it. Take a breath before speaking. The title alone has weight if you give it a moment.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide-card">
+    <div class="slide-card-header">
+      <div class="slide-num">2</div>
+      <h3>Origins &amp; Establishment</h3>
+      <span class="slide-tag" style="background:#fef3e2;color:#a0752a;">Context</span>
+    </div>
+    <div class="slide-body">
+      <div class="slide-visual-note">Suggested visual: A simple map of East Asia highlighting Manchuria and marking Harbin/Pingfang. Free, reusable maps available via Wikimedia Commons. Geographic anchoring helps audiences unfamiliar with the region.</div>
+      <ul class="bullet-list">
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">1931: Japan occupies Manchuria — the Mukden Incident</span><span class="bullet-desc">The invasion was triggered by a staged explosion on a railway line. Manchuria provided Japan with isolated, internationally unmonitored territory — a structural precondition for the program's secrecy. Without this occupation, the scale and remoteness of the Pingfang complex would not have been achievable.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Lt. Gen. Shirō Ishii identifies biological weapons as an unregulated frontier</span><span class="bullet-desc">After studying European programs in the late 1920s, Ishii observed that the 1925 Geneva Protocol prohibited use but not development of biological weapons — and contained no verification mechanism. He pitched the program to Army leadership as both a defensive necessity and a strategic opportunity. His framing was strategic, not scientific.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">1936: Emperor Hirohito issues Imperial Decree No. 575 — official authorization</span><span class="bullet-desc">The decree formally established the "Epidemic Prevention and Water Purification Department of the Kwantung Army" — the bureaucratic name under which Unit 731 operated. The public health framing was institutional cover. The actual mandate was weapons development through live human experimentation.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Pingfang complex: 6 km², purpose-built, includes crematorium, prison block (400 capacity), private airstrip</span><span class="bullet-desc">The physical design of the facility is itself evidence of intent. Labs, autopsy theaters, a crematorium, and a private airstrip are not consistent with a disease-prevention mission. The infrastructure reveals what the program actually was.</span></div></li>
+      </ul>
+      <div class="sources-block">
+        <div class="sources-label">Sources</div>
+        <div class="source-item"><strong>Britannica:</strong> "Unit 731" — founding, authorization, Pingfang description. <a href="https://www.britannica.com/topic/Unit-731" target="_blank">britannica.com/topic/Unit-731</a></div>
+        <div class="source-item"><strong>Tsuneishi, K. (2005):</strong> Asia-Pacific Journal — Ishii's reasoning, the Geneva Protocol observation, institutional authorization. <a href="https://apjjf.org/-Keiichi-Tsuneishi/1665/article.html" target="_blank">apjjf.org</a></div>
+        <div class="source-item"><strong>Harris, S. (2002):</strong> <em>Factories of Death,</em> Routledge — Pingfang construction, Ishii's proposal to Army leadership.</div>
+      </div>
+      <div class="speaker-note"><strong>Speaker note:</strong> Mention the Geneva Protocol explicitly when you reach the Ishii bullet — it is your strongest evidence that Ishii made this decision with full awareness of the ethical and legal landscape, not out of ignorance.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide-card">
+    <div class="slide-card-header">
+      <div class="slide-num">3</div>
+      <h3>Key Moral Agents</h3>
+      <span class="slide-tag" style="background:#e8f0fa;color:#1a3d6b;">Responsibility</span>
+    </div>
+    <div class="slide-body">
+      <div class="slide-visual-note">Suggested visual: A four-box layout or simple diagram labeling the four agents and their roles. Clean graphic — no photographs of individuals required. Structure communicates the layered nature of accountability.</div>
+      <ul class="bullet-list">
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Ishii &amp; commanding officers — program architects</span><span class="bullet-desc">Trained microbiologists and physicians who made the founding decision: to design lethal human experimentation rather than pursue ethical research alternatives. They understood precisely what the experiments would do — that understanding was the scientific basis for their professional qualifications.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">3,000+ researchers and physicians — direct participants</span><span class="bullet-desc">Recruited from Japan's elite universities. Many sought posting to the unit voluntarily for research resources and career advancement. They designed protocols, conducted experiments, recorded data, and performed autopsies — all choices made as trained scientific professionals, not as conscripted soldiers.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Japanese state — authorization, funding, institutional cover</span><span class="bullet-desc">Imperial Decree, Kwantung Army command, and budget allocations concealed within broader military appropriations sustained the program for over a decade. Its scale required continuous, top-level institutional support — it was not a rogue operation.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">United States (post-war) — immunity for data</span><span class="bullet-desc">A fourth moral agent appears after Japan's defeat. U.S. occupation authorities made a deliberate decision to protect Unit 731's leadership from prosecution in exchange for biological warfare research data — at the same time the same government was prosecuting Nazi doctors at Nuremberg for identical categories of crime.</span></div></li>
+      </ul>
+      <div class="sources-block">
+        <div class="sources-label">Sources</div>
+        <div class="source-item"><strong>U.S. National Archives:</strong> Declassified documents confirming immunity arrangement and data transfer. <a href="https://www.archives.gov/research/japanese-americans/unit-731" target="_blank">archives.gov</a></div>
+        <div class="source-item"><strong>Harris, S. (2002):</strong> <em>Factories of Death</em> — each agent's role, the recruitment of researchers, the immunity negotiations.</div>
+        <div class="source-item"><strong>Nie, J. (2006):</strong> <em>The Lancet</em> — professional identity of researchers and the voluntary dimension of participation. <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(06)68565-5/fulltext" target="_blank">thelancet.com</a></div>
+      </div>
+      <div class="speaker-note"><strong>Speaker note:</strong> When you reach the U.S. bullet, say "we will return to this in the outcomes section" — it plants a thread the audience wants resolved. Don't over-explain here.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide-card">
+    <div class="slide-card-header">
+      <div class="slide-num">4</div>
+      <h3>The Experiments &amp; the Maruta System</h3>
+      <span class="slide-tag" style="background:#fce8e8;color:#8b2121;">What Was Done</span>
+    </div>
+    <div class="slide-body">
+      <div class="slide-visual-note">Suggested visual: Archival photograph of the Pingfang complex interior or exterior — widely available from the Unit 731 Museum and Wikimedia. Avoid graphic medical imagery; the slide's content carries the weight without it.</div>
+      <ul class="bullet-list">
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">"Maruta" (logs) — the official administrative designation for human subjects</span><span class="bullet-desc">This was not informal slang. It was an institutionalized practice embedded in documentation and verbal communication. The deliberate redesignation of persons as material objects was a structural mechanism — designed to remove subjects from the moral consideration normally extended to human beings, making participation feel professionally routine.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Deliberate infection: plague, cholera, anthrax, typhoid, dysentery, hemorrhagic fever</span><span class="bullet-desc">Subjects were infected by injection, ingestion, and environmental exposure to determine infectious doses, incubation periods, and transmission rates for weapons development. Many underwent multiple infection cycles, kept alive between them to observe full disease progression.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Vivisection, frostbite, pressure chambers, weapons field testing</span><span class="bullet-desc">Surgery on conscious subjects without anesthesia to observe live physiology; limb immersion in ice water until frozen; pressure chamber experiments causing physical rupture; subjects staked in open fields exposed to shells filled with biological and chemical agents. These were formal research protocols — not aberrations.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Victim population: primarily Chinese POWs and civilians, Soviet soldiers, Koreans, Mongolians, documented Allied prisoners</span><span class="bullet-desc">Victims were defined by vulnerability — prisoner status, enemy nationality, geographic location in occupied territory — not by any action they had taken. Some victims were women and children. None consented. None were informed of what was being done to them in scientific terms.</span></div></li>
+      </ul>
+      <div class="sources-block">
+        <div class="sources-label">Sources</div>
+        <div class="source-item"><strong>Tsuneishi, K. (2005):</strong> Maruta classification system, experiment protocols, victim populations. <a href="https://apjjf.org/-Keiichi-Tsuneishi/1665/article.html" target="_blank">apjjf.org</a></div>
+        <div class="source-item"><strong>Gold, H. (2003):</strong> <em>Unit 731 Testimony,</em> Tuttle — first-person testimony on experimental procedures and institutional culture.</div>
+        <div class="source-item"><strong>BBC News (2002):</strong> Accessible overview of experiment categories. <a href="https://www.bbc.com/news/world-asia-pacific-15601647" target="_blank">bbc.com</a></div>
+      </div>
+      <div class="speaker-note"><strong>Speaker note:</strong> The maruta system is the most important conceptual point on this slide — explain it fully in speech. Then move through the experiment categories quickly; listing two or three is enough. Don't dwell on graphic detail.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide-card">
+    <div class="slide-card-header">
+      <div class="slide-num">5</div>
+      <h3>Scale, Network &amp; Core Decisions</h3>
+      <span class="slide-tag" style="background:#f3ede0;color:#8b5a2b;">The Decision Points</span>
+    </div>
+    <div class="slide-body">
+      <div class="slide-visual-note">Suggested visual: A simple map showing the network of affiliated units across East Asia, or a numbered 1–4 decision list graphic. Either anchors the audience spatially or structurally for this slide's content.</div>
+      <ul class="bullet-list">
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">60+ affiliated units across China, Korea, and Southeast Asia — all under epidemic prevention cover</span><span class="bullet-desc">Unit 731 at Pingfang was the command center of a larger institutional network: Unit 1855 (Beijing), Unit 1644 (Nanjing), Unit 8604 (Guangzhou), and others extending into Korea, Malaysia, Singapore, and Thailand. The program's geographic scale demonstrates it was a state-level weapons program, not an isolated facility.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Field deployment: plague-infected fleas dispersed over Ningbo (1940) and Changde (1941)</span><span class="bullet-desc">The transition from laboratory to field deployment confirms this was an active offensive weapons program. Civilian populations who never entered the Pingfang facility became victims of the biological warfare research conducted inside it. This dramatically expands the scope of the case beyond laboratory ethics.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Decision 1 — Ishii: human experimentation over ethical alternatives</span><span class="bullet-desc">Defensive biological research — vaccine development, disease prevention, field sanitation — was in active use by other nations' military medical programs. The decision for lethal human experimentation was made for speed and directness, not necessity. The ethical path was available and known.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Decision 4 — August 1945: Ishii orders destruction of evidence and execution of surviving subjects</span><span class="bullet-desc">When Japan surrendered, Ishii ordered remaining subjects killed, documents burned, and facilities partially demolished. This act is morally significant in its own right: it demonstrates that those who ran the program understood it required concealment from the outside world. Awareness of culpability, expressed through destruction of evidence.</span></div></li>
+      </ul>
+      <div class="sources-block">
+        <div class="sources-label">Sources</div>
+        <div class="source-item"><strong>Tsuneishi, K. (2005):</strong> Network of affiliated units and their geographic distribution. <a href="https://apjjf.org/-Keiichi-Tsuneishi/1665/article.html" target="_blank">apjjf.org</a></div>
+        <div class="source-item"><strong>CGTN (2025):</strong> Field biological weapons deployments — Ningbo and Changde. <a href="https://news.cgtn.com/news/2025-09-16/The-war-driven-nature-of-Unit-731-s-crimes-against-humanity-1GHSR0Twvte/index.html" target="_blank">cgtn.com</a> <em>(state media — cross-verify)</em></div>
+        <div class="source-item"><strong>Harris, S. (2002):</strong> <em>Factories of Death</em> — the 1945 destruction order and cover-up.</div>
+      </div>
+      <div class="speaker-note"><strong>Speaker note:</strong> Emphasize Decision 4 — the evidence destruction order. It is the single clearest demonstration of culpability awareness. Say it plainly and give it a beat before advancing to the next slide.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div class="slide-card">
+    <div class="slide-card-header">
+      <div class="slide-num">6</div>
+      <h3>Outcomes &amp; Consequences</h3>
+      <span class="slide-tag" style="background:#e8f4f0;color:#1a5c4a;">What Followed</span>
+    </div>
+    <div class="slide-body">
+      <div class="slide-visual-note">Suggested visual: A two-column comparison graphic — "Nuremberg (Nazi doctors): 7 executed" vs. "Unit 731 leadership: 0 prosecuted." This visual contrast is your single most powerful image on this slide and requires no photograph.</div>
+      <ul class="bullet-list">
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">~3,000 confirmed laboratory deaths; up to 300,000+ including field operations (contested)</span><span class="bullet-desc">The 3,000 figure reflects documented deaths at Pingfang, based on post-war testimony and partial surviving records. Broader estimates incorporating field biological weapons deployments and affiliated units are significantly higher and remain historically debated — in part because the deliberate record destruction in 1945 made complete accounting impossible.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">1949 Khabarovsk Trials: 12 convicted by the USSR — dismissed as propaganda by the West</span><span class="bullet-desc">The Soviet Union prosecuted 12 captured Unit 731 personnel. All were convicted and sentenced to labor camps. Western governments — the U.S. especially — publicly dismissed the proceedings as Cold War propaganda. The trial transcripts were, in fact, substantially accurate. The dismissal was motivated by the U.S. immunity deal already in place.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">U.S. immunity deal: research data → Camp Detrick; zero prosecutions of leadership by Japan or U.S.</span><span class="bullet-desc">MacArthur approved full immunity from prosecution in exchange for complete access to Unit 731's biological warfare research findings. The data went to the U.S. Army program at Fort Detrick. Ishii died in 1959, never prosecuted. Many researchers returned to prominent careers — including co-founding pharmaceutical companies still operating today.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Nuremberg comparison: 7 Nazi doctors executed for experiments of directly comparable character</span><span class="bullet-desc">Hypothermia experiments, pressure chambers, deliberate infection — the same categories of experiment, the same professional identity of perpetrators, the same victim population type. The divergence in outcome is not explained by factual differences between the programs. It is explained by a deliberate U.S. decision to prioritize strategic intelligence value over criminal accountability.</span></div></li>
+      </ul>
+      <div class="sources-block">
+        <div class="sources-label">Sources</div>
+        <div class="source-item"><strong>U.S. National Archives:</strong> Declassified MacArthur immunity authorization and Hill-Victor Report. <a href="https://www.archives.gov/research/japanese-americans/unit-731" target="_blank">archives.gov</a></div>
+        <div class="source-item"><strong>Harris, S. (2002):</strong> <em>Factories of Death</em> — Khabarovsk, immunity deal, and post-war careers of researchers.</div>
+        <div class="source-item"><strong>Nie, J. (2006):</strong> <em>The Lancet</em> — Nuremberg comparison and impact on medical ethics. <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(06)68565-5/fulltext" target="_blank">thelancet.com</a></div>
+        <div class="source-item"><strong>Britannica:</strong> Khabarovsk Trials and post-war impunity. <a href="https://www.britannica.com/topic/Unit-731" target="_blank">britannica.com/topic/Unit-731</a></div>
+      </div>
+      <div class="speaker-note"><strong>Speaker note:</strong> The Nuremberg comparison is your most powerful factual point — deliver it plainly. "The same government that prosecuted Nazi doctors for the same category of crime, in the same years, chose to protect Unit 731's leadership in exchange for data." Do not editorialize. Let the contrast do the work.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 -->
+  <div class="slide-card">
+    <div class="slide-card-header">
+      <div class="slide-num">7</div>
+      <h3>Transition — From Facts to Analysis</h3>
+      <span class="slide-tag" style="background:#f3ede0;color:#a0752a;">Handoff</span>
+    </div>
+    <div class="slide-body">
+      <div class="slide-visual-note">Suggested visual: Minimal — a clean slide with a single dividing line or the Nuremberg Code's first principle as a pull-quote: "The voluntary consent of the human subject is absolutely essential." (1947). This bridges your factual section to the ethical framework analysis that follows.</div>
+      <ul class="bullet-list">
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Summary line: what the facts establish</span><span class="bullet-desc">Two or three short recap lines — the program, its scale, the immunity outcome. Not a full list. A distilled reminder of what the audience has just heard, so they carry the factual picture into the analysis section.</span></div></li>
+        <li class="bullet-item"><div class="bullet-marker"></div><div class="bullet-content"><span class="bullet-head">Central question for Part 2: What makes these decisions specifically and philosophically wrong?</span><span class="bullet-desc">State the analytical question explicitly as a bridge. The audience now has the facts. The next section provides the ethical vocabulary — Kant, utilitarianism, rights-based ethics, virtue ethics, natural law — to evaluate them. Framing this as a question signals intellectual structure and gives the next presenter a clean entry point.</span></div></li>
+      </ul>
+      <div class="sources-block">
+        <div class="sources-label">Sources</div>
+        <div class="source-item">No new citation. If using the Nuremberg Code quote, cite: Nuremberg Code (1947), Principle 1. Available via U.S. National Institutes of Health: <a href="https://history.nih.gov/display/history/Nuremberg+Code" target="_blank">history.nih.gov</a></div>
+      </div>
+      <div class="speaker-note"><strong>Speaker note:</strong> Keep this slide on screen for 20–30 seconds maximum. Say your handoff line, make eye contact with your next groupmate, and yield the floor clearly. A confident, clean handoff reads as strong teamwork to the evaluator.</div>
+    </div>
+  </div>
+
+  <!-- Final notes -->
+  <div class="end-note">
+    <div class="label">Final delivery notes</div>
+    <ul>
+      <li><strong>Do not read the slides.</strong> The bullets orient the audience; your script informs them. If you are reading the slide, the audience is reading it too — and nobody is listening to you.</li>
+      <li><strong>The pause markers matter.</strong> A one-second pause after a key claim is not awkward — it is respectful of dense material. It also keeps your pace from accelerating under nerves.</li>
+      <li><strong>Stay neutral until the handoff.</strong> Words like "horrific," "monstrous," or "unforgivable" belong to Part 2's language, not Part 1's. Neutral delivery of terrible facts is more powerful than editorializing.</li>
+      <li><strong>If a question comes mid-presentation:</strong> Answer it in one or two sentences, then say "my groupmate will develop that further in the analysis section." Signals teamwork, keeps you on time.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>

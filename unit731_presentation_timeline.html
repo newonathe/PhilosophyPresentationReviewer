@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unit 731 Presentation Timeline</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #fafaf8; color: #1a1a18; padding: 2rem 1rem; }
+  .tl-wrap { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 18px; font-weight: 500; margin-bottom: 0.25rem; color: #1a1a18; }
+  .subtitle { font-size: 13px; color: #5f5e5a; margin-bottom: 1.5rem; }
+  .session-block { margin-bottom: 2rem; }
+  .session-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1.5px solid #d3d1c7; flex-wrap: wrap; }
+  .session-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+  .badge-morning { background: #FAEEDA; color: #633806; }
+  .badge-sleep { background: #EEEDFE; color: #3C3489; }
+  .badge-evening { background: #E1F5EE; color: #085041; }
+  .session-title { font-size: 15px; font-weight: 500; color: #1a1a18; }
+  .session-time { font-size: 13px; color: #5f5e5a; margin-left: auto; }
+  .tasks { display: flex; flex-direction: column; gap: 8px; }
+  .task { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 8px; padding: 0.75rem 1rem; cursor: pointer; transition: border-color 0.15s; }
+  .task:hover { border-color: #b4b2a9; }
+  .task.open { border-color: #888780; }
+  .task-top { display: flex; align-items: center; gap: 8px; }
+  .task-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-amber { background: #EF9F27; }
+  .dot-coral { background: #D85A30; }
+  .dot-teal { background: #1D9E75; }
+  .dot-blue { background: #378ADD; }
+  .dot-gray { background: #888780; }
+  .task-label { font-size: 13px; font-weight: 500; color: #1a1a18; flex: 1; }
+  .task-dur { font-size: 12px; color: #5f5e5a; white-space: nowrap; }
+  .task-arrow { font-size: 11px; color: #b4b2a9; transition: transform 0.2s; }
+  .task.open .task-arrow { transform: rotate(90deg); }
+  .task-detail { display: none; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 0.5px solid #d3d1c7; }
+  .task.open .task-detail { display: block; }
+  .task-detail ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .task-detail li { font-size: 12.5px; color: #5f5e5a; line-height: 1.5; padding-left: 12px; position: relative; }
+  .task-detail li::before { content: "–"; position: absolute; left: 0; color: #b4b2a9; }
+  .tip { font-size: 12px; color: #185FA5; margin-top: 6px; font-style: italic; }
+  .sleep-card { background: #f1efe8; border: 0.5px solid #d3d1c7; border-radius: 8px; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 10px; }
+  .sleep-card span { font-size: 13px; color: #5f5e5a; }
+  .progress-bar { height: 3px; background: #d3d1c7; border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #EF9F27, #1D9E75); width: 0%; transition: width 0.6s ease; }
+  .progress-label { font-size: 11px; color: #888780; margin-bottom: 4px; }
+  .check { display: inline-block; width: 14px; height: 14px; border: 1.5px solid #b4b2a9; border-radius: 3px; vertical-align: middle; margin-right: 4px; cursor: pointer; position: relative; flex-shrink: 0; }
+  .check.done { background: #1D9E75; border-color: #1D9E75; }
+  .check.done::after { content: ""; position: absolute; left: 3px; top: 1px; width: 5px; height: 8px; border: 1.5px solid #fff; border-top: none; border-left: none; transform: rotate(40deg); }
+  .counter { font-size: 12px; color: #5f5e5a; text-align: right; margin-bottom: 6px; }
+
+  @media (prefers-color-scheme: dark) {
+    body { background: #1c1c1a; color: #f1efe8; }
+    .task { background: #2c2c2a; border-color: #444441; }
+    .task:hover { border-color: #5f5e5a; }
+    .task.open { border-color: #888780; }
+    .task-label { color: #f1efe8; }
+    .task-detail li { color: #b4b2a9; }
+    .task-detail { border-color: #444441; }
+    .sleep-card { background: #2c2c2a; border-color: #444441; }
+    .sleep-card span { color: #b4b2a9; }
+    .session-header { border-color: #444441; }
+    .session-title { color: #f1efe8; }
+    .progress-bar { background: #444441; }
+    h1 { color: #f1efe8; }
+    .tip { color: #85B7EB; }
+  }
+</style>
+</head>
+<body>
+<div class="tl-wrap">
+  <h1>Unit 731 — Presentation Workflow Timeline</h1>
+  <p class="subtitle">Philosophy 13 · Part 1: Relevant Factors · Click any task to expand subtasks</p>
+
+  <p class="progress-label">Tasks completed</p>
+  <div class="counter" id="counter">0 / 14</div>
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <span class="session-badge badge-morning">Morning sprint</span>
+      <span class="session-title">Session 1 — Build the foundation</span>
+      <span class="session-time">6:30 – 9:00 AM</span>
+    </div>
+    <div class="tasks" id="morning"></div>
+  </div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <span class="session-badge badge-sleep">Rest</span>
+      <span class="session-title">Sleep block — non-negotiable</span>
+      <span class="session-time">9:00 AM – 3:00 PM</span>
+    </div>
+    <div class="sleep-card">
+      <span>6 hours of sleep. Your recall, writing quality, and verbal fluency for the defense will depend on this. Set an alarm for 2:45 PM.</span>
+    </div>
+  </div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <span class="session-badge badge-evening">Main session</span>
+      <span class="session-title">Session 2 — Build, write, and finalize</span>
+      <span class="session-time">3:00 – 9:00 PM</span>
+    </div>
+    <div class="tasks" id="evening"></div>
+  </div>
+</div>
+
+<script>
+const morningTasks = [
+  {
+    label: "Run the AI prompt",
+    dur: "6:30 – 7:00 AM",
+    dot: "dot-amber",
+    steps: [
+      "Copy the full optimized prompt into your AI of choice (ChatGPT, Gemini, Claude)",
+      "Read through the full output once — don't edit yet, just absorb",
+      "Flag any sections that feel unclear or need a follow-up query",
+      "Save the full output somewhere accessible (Google Docs, Notes, etc.)"
+    ],
+    tip: "If the sources are behind paywalls, note which ones and substitute with Wikipedia + Britannica for now."
+  },
+  {
+    label: "Verify sources and key facts",
+    dur: "7:00 – 7:40 AM",
+    dot: "dot-coral",
+    steps: [
+      "Click each provided link — mark as working or broken",
+      "For broken links, search the title directly and find the live version",
+      "Cross-check the 3–4 most critical facts (founding year, victim count, US immunity deal) across 2+ sources",
+      "Note which sources you'll cite verbally during your presentation"
+    ],
+    tip: "Britannica, BBC, and CGTN (the link you already have) are your most defensible citations."
+  },
+  {
+    label: "Outline Part 1 structure",
+    dur: "7:40 – 8:30 AM",
+    dot: "dot-teal",
+    steps: [
+      "Divide Part 1 into 4 clear segments: (1) Origins & Context, (2) Key Moral Agents, (3) The Events Chronologically, (4) Outcomes & Consequences",
+      "Under each segment, bullet-point the 3–5 facts you'll say out loud",
+      "Identify 1–2 transition lines between segments so the narration flows",
+      "Check that your outline doesn't repeat what's in Part 2 or Part 3's PDFs"
+    ],
+    tip: "Your outline is your script skeleton — keep it at bullet points for now, not full sentences."
+  },
+  {
+    label: "Read groupmates' PDFs critically",
+    dur: "8:30 – 9:00 AM",
+    dot: "dot-blue",
+    steps: [
+      "Re-read the Part 2 analysis PDF — note every framework used (Utilitarianism, Kant, Rights, Virtue, Natural Law)",
+      "Re-read the Part 3 moral insight PDF — note every moral agent discussed (Ishii, researchers, Japanese state, US)",
+      "Write down 3 things Part 1 can set up or introduce that will make those analyses land better",
+      "Jot 2–3 questions you might get asked about their parts — answer them briefly so you're ready"
+    ],
+    tip: "Sleep now. Seriously. The next session is where the real work happens."
+  }
+];
+
+const eveningTasks = [
+  {
+    label: "Warm-up and review notes",
+    dur: "3:00 – 3:20 PM",
+    dot: "dot-amber",
+    steps: [
+      "Re-read your morning outline and the AI output",
+      "Eat something and hydrate before sitting down to write",
+      "Prioritize what needs the most work based on what felt unclear this morning"
+    ],
+    tip: null
+  },
+  {
+    label: "Write the full Part 1 script",
+    dur: "3:20 – 5:00 PM",
+    dot: "dot-coral",
+    steps: [
+      "Write full spoken sentences for each bullet in your outline — this is your actual script",
+      "Keep the tone neutral and factual — no editorializing, save judgment for Parts 2 & 3",
+      "Aim for roughly 7–8 minutes of content (30% of 25 min = ~7.5 min)",
+      "Use transitions like 'This decision was made in the context of...' to connect segments naturally",
+      "Include your 3–4 source citations naturally in speech ('According to Britannica...')"
+    ],
+    tip: "Read each paragraph out loud as you write it. If you stumble, simplify the sentence."
+  },
+  {
+    label: "Craft the slide points",
+    dur: "5:00 – 6:00 PM",
+    dot: "dot-teal",
+    steps: [
+      "Translate each script segment into 3–5 bullet points per slide",
+      "Keep slide text sparse — your script carries the detail, slides carry the structure",
+      "Suggested slides: Title, Timeline/Origins, Key Moral Agents, Core Decisions, The Experiments (brief), Outcomes & Consequences, Transition to Part 2",
+      "Add one visual per slide if possible: map of Manchuria, timeline graphic, or a photo of the 731 Museum"
+    ],
+    tip: "Do NOT read off the slides. The slides prompt you, your script informs the audience."
+  },
+  {
+    label: "Dinner and break",
+    dur: "6:00 – 6:30 PM",
+    dot: "dot-gray",
+    steps: ["Eat. Step away from the screen. You'll be more precise after a real break."],
+    tip: null
+  },
+  {
+    label: "Defense prep — all three parts",
+    dur: "6:30 – 7:45 PM",
+    dot: "dot-blue",
+    steps: [
+      "Review the 5 likely Part 1 questions from the AI output — answer each out loud",
+      "Review the 5 Part 2 questions — practice brief answers using the framework names (Kant, Mill, etc.)",
+      "Review the 5 Part 3 questions — practice Kohlberg stages and phronesis definitions",
+      "Anticipate the hardest question: 'Why does this case belong in Ethics in Science specifically?' — prepare a 3-sentence answer"
+    ],
+    tip: "You don't need to memorize answers. You need to be able to reason through them calmly."
+  },
+  {
+    label: "Final script review and polish",
+    dur: "7:45 – 8:30 PM",
+    dot: "dot-teal",
+    steps: [
+      "Do one full read-through of your script out loud, timed",
+      "Cut or condense anything that pushes past 8 minutes",
+      "Fix any sentences that feel awkward to say aloud",
+      "Confirm all sources are cited and all slide points are finalized"
+    ],
+    tip: null
+  },
+  {
+    label: "Submit and rest",
+    dur: "8:30 – 9:00 PM",
+    dot: "dot-amber",
+    steps: [
+      "Send your script and slide points to your groupmates",
+      "Back up your files (Google Drive, email yourself)",
+      "You're done. Close the laptop."
+    ],
+    tip: "You finished. Sleep before the presentation day matters as much as tonight's work."
+  }
+];
+
+let allTasks = [];
+let doneSet = new Set();
+
+function renderTasks(tasks, containerId, prefix) {
+  const container = document.getElementById(containerId);
+  tasks.forEach((t, i) => {
+    const id = prefix + i;
+    allTasks.push(id);
+    const div = document.createElement('div');
+    div.className = 'task';
+    div.innerHTML = `
+      <div class="task-top">
+        <span class="check" data-id="${id}"></span>
+        <span class="task-dot ${t.dot}"></span>
+        <span class="task-label">${t.label}</span>
+        <span class="task-dur">${t.dur}</span>
+        <span class="task-arrow">›</span>
+      </div>
+      <div class="task-detail">
+        <ul>${t.steps.map(s => `<li>${s}</li>`).join('')}</ul>
+        ${t.tip ? `<p class="tip">${t.tip}</p>` : ''}
+      </div>`;
+    div.querySelector('.task-top').addEventListener('click', (e) => {
+      if (e.target.classList.contains('check')) return;
+      div.classList.toggle('open');
+    });
+    div.querySelector('.check').addEventListener('click', (el) => {
+      const chk = el.currentTarget;
+      if (doneSet.has(id)) { doneSet.delete(id); chk.classList.remove('done'); }
+      else { doneSet.add(id); chk.classList.add('done'); }
+      updateProgress();
+    });
+    container.appendChild(div);
+  });
+}
+
+function updateProgress() {
+  const pct = Math.round((doneSet.size / allTasks.length) * 100);
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('counter').textContent = doneSet.size + ' / ' + allTasks.length;
+}
+
+renderTasks(morningTasks, 'morning', 'm');
+renderTasks(eveningTasks, 'evening', 'e');
+updateProgress();
+</script>
+</body>
+</html>
